@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('comunicados', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('tipo_comunicado',50);
             $table->string('mensagem',255);
             $table->dateTime('data_envio');

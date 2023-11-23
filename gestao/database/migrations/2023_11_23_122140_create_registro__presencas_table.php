@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('registro__presencas', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->dateTime('hora_chegada');
             $table->timestamps();
         });

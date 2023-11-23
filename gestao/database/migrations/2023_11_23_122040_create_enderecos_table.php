@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('enderecos', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('cidade',100);
             $table->string('bairro',100);
             $table->string('rua',100);
-            $table->string('tipo_moradia',11);
+            $table->string('moradia',11);
             $table->integer('numero');
             $table->timestamps();
         });

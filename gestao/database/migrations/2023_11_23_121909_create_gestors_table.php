@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('gestors', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('nome',200);
             $table->char('cpf',11);
             $table->string('atuacao',50);
