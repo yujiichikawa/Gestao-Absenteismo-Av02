@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Comunicado extends Model
 {
     use HasFactory;
+
+    public function gestor()
+    {
+        return $this->hasOne(Gestor::class);
+    }
+    public function colaborador()
+    {
+        return $this->hasOne(Colaborador::class);
+    }
 }

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('colaboradors', function (Blueprint $table) {
             $table->id();
+            $table->string('nome',200);
+            $table->char('cpf',11);
+            $table->string('atuacao',50);
             $table->timestamps();
         });
     }

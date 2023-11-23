@@ -25,6 +25,6 @@ class GestorController extends Controller
     }
     public function colaboradores($cpf)
     {
-        
+
     }
 }

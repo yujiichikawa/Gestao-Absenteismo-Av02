@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contatos', function (Blueprint $table) {
-            $table->id();
-            $table->string('email',100);
-            $table->char('telefone',11);
-            $table->timestamps();
+        Schema::table('colaboradors', function (Blueprint $table) {
+            $table->foreignId('endereco_id')->constrained('enderecos');
         });
     }
 
@@ -24,6 +21,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contatos');
+        Schema::table('colaboradors', function (Blueprint $table) {
+            $table->foreignId('endereco_id')
+            ->constrained()
+            ->onDelete('cascade');
+        });
     }
 };

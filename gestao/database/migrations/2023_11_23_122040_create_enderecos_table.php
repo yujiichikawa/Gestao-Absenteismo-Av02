@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('enderecos', function (Blueprint $table) {
             $table->id();
+            $table->string('cidade',100);
+            $table->string('bairro',100);
+            $table->string('rua',100);
+            $table->string('tipo_moradia',11);
+            $table->integer('numero');
             $table->timestamps();
         });
     }

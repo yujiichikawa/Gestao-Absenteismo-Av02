@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('registro__presencas', function (Blueprint $table) {
             $table->id();
+            $table->dateTime('hora_chegada');
             $table->timestamps();
         });
     }
