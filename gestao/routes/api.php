@@ -20,13 +20,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/cadastro', [GestorController::class, 'cadastro_gestor']);
-Route::put('/update/{cpf}', [GestorController::class, 'update']);
-Route::delete('/delete/{cpf}', [GestorController::class, 'delete']);
-Route::post('/{cpf_gestor}/mensagem/enviar/{cpf_colaborador}', [GestorController::class, 'enviar_mensagem']);
-Route::get('/{cpf}/lista/colaboradores', [GestorController::class, 'colaboradores']);
+Route::put('/update/{id}', [GestorController::class, 'update']);
+Route::delete('/delete/{id}', [GestorController::class, 'delete']);
+Route::post('/{id_gestor}/mensagem/enviar/{id_colaborador}', [GestorController::class, 'enviar_mensagem']);
+Route::get('/{id}/lista/colaboradores', [GestorController::class, 'colaboradores']);
 
-Route::post('/{cpf}/colaborador/cadastro', [ColaboradorController::class, 'cadastro_colaborador']);
-Route::put('/update/{cpf}', [ColaboradorController::class, 'update']);
-Route::delete('/delete/{cpf}', [ColaboradorController::class, 'delete']);
-Route::get('/{cpf}/mensagens', [ColaboradorController::class, 'mensagems']);
-Route::get('/presenca/{cpf}', [ColaboradorController::class, 'presenca']);
+Route::post('/{id}/colaborador/cadastro', [ColaboradorController::class, 'cadastro_colaborador']);
+Route::put('/update/{id}', [ColaboradorController::class, 'update']);
+Route::delete('/delete/{id}', [ColaboradorController::class, 'delete']);
+Route::get('/{id}/mensagens', [ColaboradorController::class, 'mensagems']);
+Route::get('/presenca/{id}', [ColaboradorController::class, 'presenca']);

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Gestor extends Model
 {
     use HasFactory;
+    protected $fillable = ['nome','cpf','atuacao'];
 
     public function contato()
     {
