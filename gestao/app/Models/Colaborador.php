@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Colaborador extends Model
 {
     use HasFactory;
-
+    protected $fillable = ['nome','cpf','atuacao'];
+    
     public function contato()
     {
         return $this->hasOne(Contato::class);

@@ -2,93 +2,142 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Colaborador;
+use App\Models\Comunicado;
 use App\Models\Contato;
 use App\Models\Endereco;
 use App\Models\Gestor;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class GestorController extends Controller
 {
 
     public function cadastro_gestor(Request $request)
     {
-        //dd($request->all());
+        $existente = false;
+        $gestores = Gestor::all();
+        foreach ($gestores as $gestor) {
+            if($gestor->cpf == $request->cpf){
+                $existente = true;
+                echo 'Gestor já existente';
+            }
+        }
 
-        $contato = new Contato;
-        $contato->telefone = $request->input("contato.telefone");
-        $contato->email = $request->input("contato.email");
-        $contato->save();
+        if(!$existente){
+            $contato = new Contato;
+            $contato->telefone = $request->input("contato.telefone");
+            $contato->email = $request->input("contato.email");
+            $contato->save();
 
 
-        $endereco = new Endereco;
-        $endereco->cidade = $request->input("endereco.cidade");
-        $endereco->bairro = $request->input("endereco.bairro");
-        $endereco->rua = $request->input("endereco.rua");
-        $endereco->moradia = $request->input("endereco.moradia");
-        $endereco->numero = $request->input("endereco.numero");
-        $endereco->save();
+            $endereco = new Endereco;
+            $endereco->cidade = $request->input("endereco.cidade");
+            $endereco->bairro = $request->input("endereco.bairro");
+            $endereco->rua = $request->input("endereco.rua");
+            $endereco->moradia = $request->input("endereco.moradia");
+            $endereco->numero = $request->input("endereco.numero");
+            $endereco->save();
 
 
-        $gestor = new Gestor;
-        $gestor->nome = $request->nome;
-        $gestor->cpf = $request->cpf;
-        $gestor->atuacao = $request->atuacao;
-        $gestor->endereco_id = $endereco->id;
-        $gestor->contato_id = $contato->id;
-        $gestor->save();
+            $gestor = new Gestor;
+            $gestor->nome = $request->nome;
+            $gestor->cpf = $request->cpf;
+            $gestor->atuacao = $request->atuacao;
+            $gestor->endereco_id = $endereco->id;
+            $gestor->contato_id = $contato->id;
+            $gestor->save();
 
+        }
 
     }
 
-    public function update(Request $request, $id)
+    public function update($id,Request $request)
     {
-        $data = $request->all();
 
         $gestor = Gestor::find($id);
+        if(is_null($gestor)){
+            echo 'Gestor não existente';
+        }else{
 
-        $gestor->nome = $data->nome;
-        $gestor->cpf = $data->cpf;
-        $gestor->atuacao = $data->atuacao;
-        $gestor->save();
+            if($gestor->cpf != $request->cpf){
+                echo "cpf não pode ser alterado";
+            }else{
 
-        $contato = Contato::find($gestor->contato_id);
-        $contato->telefone = $data->contato->telefone;
-        $contato->email = $data->contato->email;
-        $contato->save();
+                $gestor->nome = $request->nome;
+                $gestor->cpf = $request->cpf;
+                $gestor->atuacao = $request->atuacao;
+                $gestor->save();
 
-        $endereco = Endereco::find($gestor->endereco_id);
-        $endereco->cidade = $data->endereco->cidade;
-        $endereco->bairro = $data->endereco->bairro;
-        $endereco->rua = $data->endereco->rua;
-        $endereco->moradia = $data->endereco->moradia;
-        $endereco->numero = $data->endereco->numero;
-        $endereco->save();
+                $contato = Contato::find($gestor->contato_id);
+                $contato->telefone = $request->input("contato.telefone");
+                $contato->email = $request->input("contato.email");
+                $contato->save();
 
-        //Flight::where('active', 1)
-        //    ->where('destination', 'San Diego')
-        //    ->update(['delayed' => 1]);
+                $endereco = Endereco::find($gestor->endereco_id);
+                $endereco->cidade = $request->input("endereco.cidade");
+                $endereco->bairro = $request->input("endereco.bairro");
+                $endereco->rua = $request->input("endereco.rua");
+                $endereco->moradia = $request->input("endereco.moradia");
+                $endereco->numero = $request->input("endereco.numero");
+                $endereco->save();
+            }
 
-        //$contato = [
-        //    'telefone' => $request->input("contato.telefone"),
-        //    'email' => $request->input("contato.email"),
-        //];
-
-        //Contato::where('id',$gestor->contato_id)->update($contato);
-        //$contato = DB::select('select * from contatos where active = ?', [$gestor->contato_id]);
-        //$contato->telefone = $request->input("contato.telefone");
-        //$contato->email = $request->input("contato.email");
+        }
 
     }
-    public function delete($cpf)
+    public function delete($id)
     {
-
+        $gestor = Gestor::find($id);
+        if(is_null($gestor)){
+            echo 'Gestor não existente';
+        }else{
+            $gestor->delete();
+            $contato = Contato::find($gestor->contato_id)->delete();
+            $endereco = Endereco::find($gestor->endereco_id)->delete();
+        }
     }
-    public function enviar_mensagem($cpf_gestor, $cpf_colaborador)
+    public function enviar_mensagem($id_gestor, $id_colaborador,Request $request)
     {
-
+        $gestor = Gestor::find($id_gestor);
+        if(is_null($gestor)){
+            echo 'Gestor não existente';
+        }else{
+            $colaborador = Colaborador::find($id_colaborador);
+            if(is_null($colaborador)){
+                echo 'Colaborador não existente';
+            }else{
+                $comunicado = new Comunicado;
+                $comunicado->tipo_comunicado = $request->input("tipo_comunicado");
+                $comunicado->mensagem = $request->input("mensagem");
+                $comunicado->data_envio = new DateTime('now');
+                $comunicado->gestor_id = $gestor->id;
+                $comunicado->colaborador_id = $colaborador->id;
+                $comunicado->save();
+            }
+        }
     }
-    public function colaboradores($cpf)
+    public function colaboradores($id)
     {
+        $gestor = Gestor::find($id);
+        $colaboradores = Colaborador::all();
+        $colaborador_gestor = [];
 
+        if(is_null($gestor)){
+            echo 'Gestor não existente';
+        }else{
+            foreach ($colaboradores as $colaborador) {
+                if($colaborador->gestor_id == $gestor->id){
+                    array_push($colaborador_gestor,$colaborador);
+                }
+            }
+
+            if(empty($colaborador_gestor)){
+                echo 'Não há colaboradores';
+            }else{
+                return $colaborador_gestor;
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,4 +27,5 @@ class Gestor extends Model
     {
         return $this->belongsTo(Colaborador::class);
     }
+
 }
