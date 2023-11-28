@@ -9,7 +9,6 @@ use App\Models\Endereco;
 use App\Models\Gestor;
 use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class GestorController extends Controller
 {
@@ -49,6 +48,7 @@ class GestorController extends Controller
             $gestor->contato_id = $contato->id;
             $gestor->save();
 
+            return $request;
         }
 
     }
@@ -82,6 +82,7 @@ class GestorController extends Controller
                 $endereco->moradia = $request->input("endereco.moradia");
                 $endereco->numero = $request->input("endereco.numero");
                 $endereco->save();
+                echo 'Atualizado com sucesso';
             }
 
         }
@@ -96,6 +97,7 @@ class GestorController extends Controller
             $gestor->delete();
             $contato = Contato::find($gestor->contato_id)->delete();
             $endereco = Endereco::find($gestor->endereco_id)->delete();
+            echo 'Gestor foi excluido com sucesso';
         }
     }
     public function enviar_mensagem($id_gestor, $id_colaborador,Request $request)
@@ -115,6 +117,7 @@ class GestorController extends Controller
                 $comunicado->gestor_id = $gestor->id;
                 $comunicado->colaborador_id = $colaborador->id;
                 $comunicado->save();
+                echo 'Comunicado enviado com sucesso';
             }
         }
     }
@@ -129,7 +132,16 @@ class GestorController extends Controller
         }else{
             foreach ($colaboradores as $colaborador) {
                 if($colaborador->gestor_id == $gestor->id){
-                    array_push($colaborador_gestor,$colaborador);
+                    $contato = Contato::find($colaborador->id);
+                    $object_edit = (object) [
+                        'nome' => $colaborador->nome,
+                        'cpf' => $colaborador->cpf,
+                        'atuacao' => $colaborador->atuacao,
+                        'email' => $contato->email,
+                        'telefone' => $contato->telefone,
+                    ];
+
+                    array_push($colaborador_gestor,$object_edit);
                 }
             }
 

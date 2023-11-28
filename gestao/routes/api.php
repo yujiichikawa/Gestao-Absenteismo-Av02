@@ -28,7 +28,7 @@ Route::post('/{id_gestor}/mensagem/enviar/{id_colaborador}', [GestorController::
 Route::get('/{id}/lista/colaboradores', [GestorController::class, 'colaboradores']);
 
 Route::post('/{id_gestor}/colaborador/cadastro', [ColaboradorController::class, 'cadastro_colaborador']);
-Route::put('/colaborador/update/{id}', [ColaboradorController::class, 'update']);
-Route::delete('/colaborador/delete/{id}', [ColaboradorController::class, 'delete']);
+Route::put('/colaborador/atualizar/{id}', [ColaboradorController::class, 'update']);
+Route::delete('/colaborador/deletar/{id}', [ColaboradorController::class, 'delete']);
 Route::get('/{id}/mensagens', [ColaboradorController::class, 'mensagems']);
 Route::get('/presenca/{id}', [ColaboradorController::class, 'presenca']);
